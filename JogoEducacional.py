@@ -1,5 +1,8 @@
+from funcoesDoJogo import textos, mensagensNoDisplay, morte
+
 import pygame
 import random
+import time
 
 pygame.init()
 
@@ -19,47 +22,57 @@ porcarias = [pygame.image.load("assets/food1.png"), pygame.image.load("assets/fo
         pygame.image.load("assets/food5.png")]
 porcariasRandom = random.choice(porcarias)
 
-preto = (0, 0, 0)
 branco = (255, 255, 255)
 
-personagemPosicaoX = 380
-personagemPosicaoY = 405
-movimentoX = 0
-porcariasPosicaoX = 380
-porcariasPosicaoY = -220
-porcariasLargura = 50
-porcariasAltura = 22
-porcariasVelocidade = 5
+def jogo():
+    personagemPosicaoX = 380
+    personagemPosicaoY = 405
+    personagemLargura = 110
+    movimentoX = 0
+    porcariasPosicaoX = 380
+    porcariasPosicaoY = -220
+    porcariasLargura = 50
+    porcariasAltura = 22
+    porcariasVelocidade = 5
+    desvios = 0
 
-while True:
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        if evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_LEFT:
-                movimentoX = -5
-            elif evento.key == pygame.K_RIGHT:
-                movimentoX = 5
-        if evento.type == pygame.KEYUP:
-            movimento = 0                
-    
-    display.fill(branco)
-    display.blit(fundo, (0,0))
-    
-    personagemPosicaoX = personagemPosicaoX + movimentoX
-    if personagemPosicaoX < 0:
-        personagemPosicaoX = 0
-    elif personagemPosicaoX > 760:
-        personagemPosicaoX = 760    
-    display.blit(personagem, (personagemPosicaoX, personagemPosicaoY))
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_LEFT:
+                    movimentoX = -5
+                elif evento.key == pygame.K_RIGHT:
+                    movimentoX = 5
+            if evento.type == pygame.KEYUP:
+                movimentoX = 0                
+        
+        display.fill(branco)
+        display.blit(fundo, (0,0))
+        
+        personagemPosicaoX = personagemPosicaoX + movimentoX
+        if personagemPosicaoX < 0:
+            personagemPosicaoX = 0
+        elif personagemPosicaoX > 760:
+            personagemPosicaoX = 760    
+        display.blit(personagem, (personagemPosicaoX, personagemPosicaoY))
 
-    display.blit(porcariasRandom, (porcariasPosicaoX, porcariasPosicaoY))
-    porcariasPosicaoY = porcariasPosicaoY + porcariasVelocidade
-    if porcariasPosicaoY > altura:
-        porcariasPOsicaoY = -220
-        porcariasVelocidade += 1
-        porcariasPosicaoX = random.randrange(0,largura - 50)
+        display.blit(porcariasRandom, (porcariasPosicaoX, porcariasPosicaoY))
+        porcariasPosicaoY = porcariasPosicaoY + porcariasVelocidade
+        if porcariasPosicaoY > altura:
+            porcariasPosicaoY = -220
+            porcariasVelocidade += 1
+            porcariasPosicaoX = random.randrange(0,largura - 50)
+            desvios += 1
 
-    pygame.display.update()
-    fps.tick(60)
+        if personagemPosicaoY < porcariasPosicaoY + porcariasAltura:
+            if personagemPosicaoX < porcariasPosicaoX and personagemPosicaoX + personagemLargura > porcariasPosicaoX or porcariasPosicaoX + porcariasLargura > personagemPosicaoX and porcariasPosicaoX + porcariasLargura < personagemPosicaoX + personagemLargura:
+                morte()
+
+        
+        pygame.display.update()
+        fps.tick(60)
+
+jogo()
