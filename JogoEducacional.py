@@ -1,25 +1,22 @@
-from funcoesDoJogo import textos, pontuacao
-
+from funcoesDoJogo import textos, pontuacao, criaLog
 import pygame
 import random
 import time
+import os
 
 pygame.init()
 
 icone = pygame.image.load("assets/icone.png")
 pygame.display.set_caption("Junk Food Runner")
 pygame.display.set_icon(icone)
-
 largura = 800
 altura = 600
 display = pygame.display.set_mode((largura, altura))
 fps = pygame.time.Clock()
-
 fundo = pygame.image.load("assets/fundo.png")
 personagem = pygame.image.load("assets/personagem.png")
-porcarias = [pygame.image.load("assets/food1.png"), pygame.image.load("assets/food2.png"), pygame.image.load("assets/food3.png"), pygame.image.load("assets/food4.png"), pygame.image.load("assets/food5.png")]
+porcarias = [pygame.image.load("assets/porcaria_1.png"), pygame.image.load("assets/porcaria_2.png"), pygame.image.load("assets/porcaria_3.png"), pygame.image.load("assets/porcaria_4.png"), pygame.image.load("assets/porcaria_5.png")]
 porcariasRandom = random.choice(porcarias)
-
 branco = (255, 255, 255)
 
 def mensagensNoDisplay(text):
@@ -41,7 +38,7 @@ def jogo():
     movimentoX = 0
     porcariasPosicaoX = 380
     porcariasPosicaoY = -220
-    porcariasLargura = 50
+    porcariasLargura = 32
     porcariasAltura = 22
     porcariasVelocidade = 5
     pontos = 0
@@ -84,5 +81,16 @@ def jogo():
         pontuacao(pontos, branco)
         pygame.display.update()
         fps.tick(60)
+        
+os.system("cls")
 
+while True:
+    nome = input("Insira seu nome: ")
+    email = input("Insira seu email: ") 
+    if not nome or not email: 
+        print("Não deixe os campos em branco!")  
+    else:
+        break    
+    
+criaLog(nome, email)
 jogo()

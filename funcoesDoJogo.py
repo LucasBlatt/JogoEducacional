@@ -14,3 +14,10 @@ def pontuacao(pontos, cor):
     texto = font.render("Pontuação:" + str(pontos), True, cor)
     display.blit(texto, (0, 20))
     pygame.display.update()
+
+def criaLog(nome, email):
+    arquivo = open("log.txt", "w")
+    arquivo.write("Nome: ")
+    arquivo.write(nome)
+    arquivo.write("\nEmail: ")
+    arquivo.write(email)
