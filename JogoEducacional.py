@@ -1,4 +1,4 @@
-from funcoesDoJogo import textos, mensagensNoDisplay, morte
+from funcoesDoJogo import textos, pontuacao
 
 import pygame
 import random
@@ -17,12 +17,22 @@ fps = pygame.time.Clock()
 
 fundo = pygame.image.load("assets/fundo.png")
 personagem = pygame.image.load("assets/personagem.png")
-porcarias = [pygame.image.load("assets/food1.png"), pygame.image.load("assets/food2.png"),
-    pygame.image.load("assets/food3.png"), pygame.image.load("assets/food4.png"),
-        pygame.image.load("assets/food5.png")]
+porcarias = [pygame.image.load("assets/food1.png"), pygame.image.load("assets/food2.png"), pygame.image.load("assets/food3.png"), pygame.image.load("assets/food4.png"), pygame.image.load("assets/food5.png")]
 porcariasRandom = random.choice(porcarias)
 
 branco = (255, 255, 255)
+
+def mensagensNoDisplay(text):
+    fonte = pygame.font.Font("assets/fonte.ttf", 115)
+    TextSurf, TextRect = textos(text, fonte, branco)
+    TextRect.center = ((largura / 2), (altura / 2))
+    display.blit(TextSurf, TextRect)
+    pygame.display.update()
+    time.sleep(3)
+    jogo()
+
+def morte():
+    mensagensNoDisplay("Você Morreu!")  
 
 def jogo():
     personagemPosicaoX = 380
@@ -34,7 +44,7 @@ def jogo():
     porcariasLargura = 50
     porcariasAltura = 22
     porcariasVelocidade = 5
-    desvios = 0
+    pontos = 0
 
     while True:
         for evento in pygame.event.get():
@@ -65,13 +75,13 @@ def jogo():
             porcariasPosicaoY = -220
             porcariasVelocidade += 1
             porcariasPosicaoX = random.randrange(0,largura - 50)
-            desvios += 1
+            pontos += 1
 
         if personagemPosicaoY < porcariasPosicaoY + porcariasAltura:
             if personagemPosicaoX < porcariasPosicaoX and personagemPosicaoX + personagemLargura > porcariasPosicaoX or porcariasPosicaoX + porcariasLargura > personagemPosicaoX and porcariasPosicaoX + porcariasLargura < personagemPosicaoX + personagemLargura:
                 morte()
 
-        
+        pontuacao(pontos, branco)
         pygame.display.update()
         fps.tick(60)
 
