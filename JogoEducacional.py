@@ -6,6 +6,7 @@ import os
 
 pygame.init()
 
+somDosPontos = pygame.mixer.Sound("assets/pontos.wav")
 icone = pygame.image.load("assets/icone.png")
 pygame.display.set_caption("Junk Food Runner")
 pygame.display.set_icon(icone)
@@ -18,28 +19,36 @@ personagem = pygame.image.load("assets/personagem.png")
 porcarias = [pygame.image.load("assets/porcaria_1.png"), pygame.image.load("assets/porcaria_2.png"), pygame.image.load("assets/porcaria_3.png"), pygame.image.load("assets/porcaria_4.png"), pygame.image.load("assets/porcaria_5.png")]
 porcariasRandom = random.choice(porcarias)
 branco = (255, 255, 255)
+preto = (0, 0, 0)
 
 def mensagensNoDisplay(text):
-    fonte = pygame.font.Font("assets/fonte.ttf", 115)
-    TextSurf, TextRect = textos(text, fonte, branco)
-    TextRect.center = ((largura / 2), (altura / 2))
+    fonte = pygame.font.Font("assets/fonte.ttf", 40)
+    TextSurf, TextRect = textos(text, fonte, preto)
+    TextRect.center = ((largura / 2), ((altura / 2) - 20))
     display.blit(TextSurf, TextRect)
     pygame.display.update()
     time.sleep(3)
     jogo()
 
-def morte():
-    mensagensNoDisplay("Você Morreu!")  
+def morte(pontos):
+    pygame.mixer.music.load("assets/morreu.wav")
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play()
+    mensagensNoDisplay("GAME OVER! Você tinha:" + str(pontos) +" Ponto(s)")  
 
 def jogo():
+    pygame.mixer.music.load("assets/fundo.wav")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(-1)
+    
     personagemPosicaoX = 380
     personagemPosicaoY = 405
     personagemLargura = 110
     movimentoX = 0
     porcariasPosicaoX = 380
     porcariasPosicaoY = -220
-    porcariasLargura = 32
-    porcariasAltura = 22
+    porcariasLargura = 1
+    porcariasAltura = 1
     porcariasVelocidade = 5
     pontos = 0
 
@@ -60,15 +69,18 @@ def jogo():
         display.blit(fundo, (0,0))
         
         personagemPosicaoX = personagemPosicaoX + movimentoX
+        
         if personagemPosicaoX < 0:
             personagemPosicaoX = 0
         elif personagemPosicaoX > 760:
             personagemPosicaoX = 760    
+        
         display.blit(personagem, (personagemPosicaoX, personagemPosicaoY))
-
         display.blit(porcariasRandom, (porcariasPosicaoX, porcariasPosicaoY))
         porcariasPosicaoY = porcariasPosicaoY + porcariasVelocidade
+        
         if porcariasPosicaoY > altura:
+            pygame.mixer.Sound.play(somDosPontos)
             porcariasPosicaoY = -220
             porcariasVelocidade += 1
             porcariasPosicaoX = random.randrange(0,largura - 50)
@@ -76,7 +88,7 @@ def jogo():
 
         if personagemPosicaoY < porcariasPosicaoY + porcariasAltura:
             if personagemPosicaoX < porcariasPosicaoX and personagemPosicaoX + personagemLargura > porcariasPosicaoX or porcariasPosicaoX + porcariasLargura > personagemPosicaoX and porcariasPosicaoX + porcariasLargura < personagemPosicaoX + personagemLargura:
-                morte()
+                morte(pontos)
 
         pontuacao(pontos, branco)
         pygame.display.update()
@@ -84,7 +96,7 @@ def jogo():
         
 os.system("cls")
 
-while True:
+'''while True:
     nome = input("Insira seu nome: ")
     email = input("Insira seu email: ") 
     if not nome or not email: 
@@ -92,5 +104,5 @@ while True:
     else:
         break    
     
-criaLog(nome, email)
+criaLog(nome, email)'''
 jogo()
