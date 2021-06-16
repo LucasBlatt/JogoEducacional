@@ -1,2 +1,2 @@
-Nome: lucas
-Email: teste
+Nome: Lucas Blatt
+Email: teste@gmail.com

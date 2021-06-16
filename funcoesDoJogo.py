@@ -10,10 +10,10 @@ def textos(texto, fonte, cor):
     textSurface = fonte.render(texto, True, cor)
     return textSurface, textSurface.get_rect()
 
-def pontuacao(pontos, cor):
+def pontuacao(escrita, pontos, cor, x, y):
     font = pygame.font.Font("assets/fonte.ttf", 25)
-    texto = font.render("Pontuação:" + str(pontos), True, cor)
-    display.blit(texto, (0, 20))
+    texto = font.render(escrita + str(pontos), True, cor)
+    display.blit(texto, (x, y))
     pygame.display.update()
 
 def criaLog(nome, email):
